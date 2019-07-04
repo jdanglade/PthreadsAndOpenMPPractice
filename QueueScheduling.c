@@ -24,6 +24,25 @@ typedef enum {false, true} bool;
 
 bool validateCommandInput(int , const char * [], long int *, long int *);
 
+int main(int argc, const char * argv[])
+{
+    char * message;
+    long int argOne = NUMINIT;
+    long int argTwo = NUMINIT;
+    long int iterator = NUMINIT;
+    if(validateCommandInput(argc, argv, &argOne, &argTwo))
+    {
+        
+    }
+    else
+    {
+        message = "Invalid input";
+        printf("%s\n", message);
+        return NUMINIT + 1;
+    }
+    return NUMINIT;
+}
+
 bool validateCommandInput(int inputLength, const char * input[], long int * argOne, long int * argTwo)
 {
     bool valid = false;

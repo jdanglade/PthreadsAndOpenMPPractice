@@ -40,7 +40,7 @@ int main(int argv, const char * argc[])
     #ifdef PTHREAD_SYNC
     if (pthread_mutex_init(&lock, NULL) != 0)
     {
-        printf("\n mutex init has failed\n");
+        fprintf(stdout, "\n mutex init has failed\n");
         return NUMINIT + 1;
     }
     #endif
@@ -63,7 +63,7 @@ int main(int argv, const char * argc[])
     else
     {
         message = "Invalid input";
-        printf("%s\n", message);
+        fprintf(stderr, "%s\n", message);
         return NUMINIT + 1;
     }
     #ifdef PTHREAD_SYNC
@@ -101,7 +101,7 @@ void simpleThread(long threadID)
         pthread_mutex_lock(&lock);
         #endif
         val = sharedVariable;
-        printf("*** thread %ld sees value %d\n", threadID, val);
+        fprintf(stdout, "*** thread %ld sees value %d\n", threadID, val);
         sharedVariable = val + 1;
         #ifdef PTHREAD_SYNC
         pthread_mutex_unlock(&lock);
@@ -111,7 +111,7 @@ void simpleThread(long threadID)
     pthread_barrier_wait(&barrier);
     #endif
     val = sharedVariable;
-    printf("Thread %ld sees final value %d\n", threadID, val);
+    fprintf(stdout, "Thread %ld sees final value %d\n", threadID, val);
 }
 
 void * threadFunction(void * threadID)
