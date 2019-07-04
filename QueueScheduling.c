@@ -32,12 +32,12 @@ int main(int argc, const char * argv[])
     long int iterator = NUMINIT;
     if(validateCommandInput(argc, argv, &argOne, &argTwo))
     {
-        
+
     }
     else
     {
         message = "Invalid input";
-        printf("%s\n", message);
+        fprintf(stderr, "%s\n", message);
         return NUMINIT + 1;
     }
     return NUMINIT;
