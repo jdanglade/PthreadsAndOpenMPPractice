@@ -6,11 +6,10 @@ appropriate.
 Prof. Jose F. Osorio
 Student: Justin Danglade – 4552415
 Project: Multithreaded Programming
-Specs:
 Due Date: 07/8/2019 by 11:55pm
-Module Name:
+File Name: Pthread_Synchronization.c
 
-I Certify that this program code has been written by me
+I certify that this program code has been written by me
 and no part of it has been taken from any sources.
 */
 
@@ -76,17 +75,17 @@ int main(int argv, const char * argc[])
 
 bool validateCommandInput(int inputLength, const char * input[], long int * convert)
 {
-    bool isInt = false;
+    bool valid = false;
     char * endPoint;
-    if(inputLength > 1)
+    if(inputLength == 2)
     {
         *convert = atol(input[NUMINIT + 1]);
         if(NUMINIT != *convert)
         {
-            isInt++;
+            valid++;
         }
     }
-    return isInt;
+    return valid;
 }
 
 void simpleThread(long threadID)
