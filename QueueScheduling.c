@@ -22,7 +22,17 @@ and no part of it has been taken from any sources.
 #define NUMINIT 0
 typedef enum {false, true} bool;
 
-bool validateCommandInput(int , const char * [], long int *, long int *);
+bool validateCommandInput(int, const char * [], long int *, long int *);
+void officeHours(int, const char * [], long int *, long int *);
+void professor();
+void answerStart();
+void answerDone();
+void student(int id);
+void enterOffice();
+void questionStart();
+void questionDone();
+void leaveOffice();
+pthread_mutex_t lock;
 
 int main(int argc, const char * argv[])
 {
@@ -32,7 +42,7 @@ int main(int argc, const char * argv[])
     long int iterator = NUMINIT;
     if(validateCommandInput(argc, argv, &argOne, &argTwo))
     {
-
+        officeHours(argc, argv, &argOne, &argTwo);
     }
     else
     {
@@ -57,4 +67,9 @@ bool validateCommandInput(int inputLength, const char * input[], long int * argO
         }
     }
     return valid;
+}
+
+void officeHours(int, const char * [], long int *, long int *)
+{
+
 }
