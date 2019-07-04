@@ -16,7 +16,6 @@ and no part of it has been taken from any sources.
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdint.h>
 #include <time.h>
 #include <pthread.h>
 #define NUMINIT 0
@@ -40,7 +39,7 @@ int main(int argv, const char * argc[])
     #ifdef PTHREAD_SYNC
     if (NUMINIT != pthread_mutex_init(&lock, NULL))
     {
-        fprintf(stdout, "\n Mutex init has failed\n");
+        fprintf(stdout, "\nMutex init has failed\n");
         exit(NUMINIT + 1);
     }
     #endif
@@ -50,7 +49,7 @@ int main(int argv, const char * argc[])
         #ifdef PTHREAD_SYNC
         if(NUMINIT != pthread_barrier_init(&barrier, NULL, convert))
         {
-            fprintf(stdout, "\n Barrier init has failed\n");
+            fprintf(stdout, "\nBarrier init has failed\n");
             exit(NUMINIT + 1);
         }
         #endif
@@ -59,7 +58,7 @@ int main(int argv, const char * argc[])
         {
             if(NUMINIT != pthread_create(&threads[iterator], NULL, threadFunction, (void *)iterator))
             {
-                fprintf(stderr, "\n Thread creation has failed\n");
+                fprintf(stderr, "\nThread creation has failed\n");
                 exit(NUMINIT + 1);
             }
         }
@@ -67,26 +66,26 @@ int main(int argv, const char * argc[])
         {
             if(NUMINIT != pthread_join(threads[iterator], NULL))
             {
-                fprintf(stderr, "\n Thread join has failed\n");
+                fprintf(stderr, "\nThread join has failed\n");
                 exit(NUMINIT + 1);
             }
         }
     }
     else
     {
-        message = "\n Invalid input \n";
+        message = "\nInvalid input\n";
         fprintf(stderr, "%s\n", message);
         return NUMINIT + 1;
     }
     #ifdef PTHREAD_SYNC
-    if(pthread_mutex_destroy(&lock))
+    if(NUMINIT != pthread_mutex_destroy(&lock))
     {
-        fprintf(stderr, "\n Mutex creation has failed\n");
+        fprintf(stderr, "\nMutex creation has failed\n");
         exit(NUMINIT + 1);
     }
-    if(pthread_barrier_destroy(&barrier))
+    if(NUMINIT != pthread_barrier_destroy(&barrier))
     {
-        fprintf(stderr, "\n Thread creation has failed\n");
+        fprintf(stderr, "\nThread creation has failed\n");
         exit(NUMINIT + 1);
     }
     #endif
@@ -96,7 +95,6 @@ int main(int argv, const char * argc[])
 bool validateCommandInput(int inputLength, const char * input[], long int * convert)
 {
     bool valid = false;
-    char * endPoint;
     if(inputLength == 2)
     {
         *convert = atol(input[NUMINIT + 1]);
@@ -120,7 +118,7 @@ void simpleThread(long threadID)
         #ifdef PTHREAD_SYNC
         if(NUMINIT != pthread_mutex_lock(&lock))
         {
-            fprintf(stdout, "\n Mutex lock has failed\n");
+            fprintf(stdout, "\nMutex lock has failed\n");
             exit(NUMINIT + 1);
         }
         #endif
@@ -130,7 +128,7 @@ void simpleThread(long threadID)
         #ifdef PTHREAD_SYNC
         if(NUMINIT != pthread_mutex_unlock(&lock))
         {
-            fprintf(stdout, "\n Mutex unlock has failed\n");
+            fprintf(stdout, "\nMutex unlock has failed\n");
             exit(NUMINIT + 1);
         }
         #endif

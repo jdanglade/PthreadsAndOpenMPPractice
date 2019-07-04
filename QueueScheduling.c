@@ -16,14 +16,13 @@ and no part of it has been taken from any sources.
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdint.h>
 #include <time.h>
 #include <pthread.h>
 #define NUMINIT 0
 typedef enum {false, true} bool;
 
 bool validateCommandInput(int, const char * [], long int *, long int *);
-void officeHours(int, const char * [], long int *, long int *);
+void officeHours(long int *, long int *);
 void professor();
 void answerStart();
 void answerDone();
@@ -32,21 +31,23 @@ void enterOffice();
 void questionStart();
 void questionDone();
 void leaveOffice();
-pthread_mutex_t lock;
+void nap();
+pthread_mutex_t sLock, pLock;
+long int sCond, pCond = NUMINIT;
+pthread_cond_t studentCond, profCond;
 
 int main(int argc, const char * argv[])
 {
     char * message;
     long int argOne = NUMINIT;
     long int argTwo = NUMINIT;
-    long int iterator = NUMINIT;
     if(validateCommandInput(argc, argv, &argOne, &argTwo))
     {
-        officeHours(argc, argv, &argOne, &argTwo);
+        officeHours(&argOne, &argTwo);
     }
     else
     {
-        message = "Invalid input";
+        message = "Invalid input\n";
         fprintf(stderr, "%s\n", message);
         return NUMINIT + 1;
     }
@@ -56,7 +57,6 @@ int main(int argc, const char * argv[])
 bool validateCommandInput(int inputLength, const char * input[], long int * argOne, long int * argTwo)
 {
     bool valid = false;
-    char * endPoint;
     if(inputLength == 3)
     {
         *argOne = atol(input[NUMINIT + 1]);
@@ -69,7 +69,54 @@ bool validateCommandInput(int inputLength, const char * input[], long int * argO
     return valid;
 }
 
-void officeHours(int, const char * [], long int *, long int *)
+void officeHours(long int * numOfStudents, long int * roomCapacity)
 {
+    pthread_t students[*numOfStudents];
+    pthread_t professorThread;
+    int numOfQuestions[*numOfStudents];
+    pCond = *numOfStudents;
+    srand(time(NULL));
+    int iterator;
+    if(NUMINIT != pthread_create(&professorThread, NULL, (void *)professor, NULL))
+    {
+        fprintf(stderr, "\nThread creation has failed\n");
+        exit(NUMINIT + 1);
+    }
+    for(iterator = NUMINIT; iterator < *numOfStudents; iterator++)
+    {
+        if(NUMINIT != pthread_create(&students[iterator], NULL, (void *)nap, NULL))
+        {
+            fprintf(stderr, "\nThread creation has failed\n");
+            exit(NUMINIT + 1);
+        }
+        numOfQuestions[iterator] = rand() % 4 + 1;
+    }
+    for(iterator = NUMINIT; iterator < *numOfStudents; iterator++)
+    {
+        if(NUMINIT != pthread_join(students[iterator], NULL))
+        {
+            fprintf(stderr, "\nThread join has failed\n");
+            exit(NUMINIT + 1);
+        }
+    }
+    if(NUMINIT != pthread_join(professorThread, NULL))
+    {
+        fprintf(stderr, "\nThread join has failed\n");
+        exit(NUMINIT + 1);
+    }
+}
+
+void professor()
+{
+    if(NUMINIT == pCond)
+    {
+        nap();
+    }
+}
+
+void nap()
+{
+    char * message = "Shh!... No students left, the professor is napping";
+    fprintf(stdout, "%s\n", message);
 
 }
