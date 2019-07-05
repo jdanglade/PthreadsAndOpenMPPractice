@@ -32,9 +32,10 @@ void questionStart();
 void questionDone();
 void leaveOffice();
 void nap();
+
 pthread_mutex_t sLock, pLock;
-long int sCond, pCond = NUMINIT;
-pthread_cond_t studentCond, profCond;
+long int sCondition, pCondition = NUMINIT;
+pthread_cond_t sConditional, profConditional;
 
 int main(int argc, const char * argv[])
 {
@@ -71,10 +72,10 @@ bool validateCommandInput(int inputLength, const char * input[], long int * argO
 
 void officeHours(long int * numOfStudents, long int * roomCapacity)
 {
-    pthread_t students[*numOfStudents];
+    pthread_t studentThreads[*numOfStudents];
     pthread_t professorThread;
     int numOfQuestions[*numOfStudents];
-    pCond = *numOfStudents;
+    pCondition = *numOfStudents;
     srand(time(NULL));
     int iterator;
     if(NUMINIT != pthread_create(&professorThread, NULL, (void *)professor, NULL))
@@ -84,7 +85,7 @@ void officeHours(long int * numOfStudents, long int * roomCapacity)
     }
     for(iterator = NUMINIT; iterator < *numOfStudents; iterator++)
     {
-        if(NUMINIT != pthread_create(&students[iterator], NULL, (void *)nap, NULL))
+        if(NUMINIT != pthread_create(&studentThreads[iterator], NULL, (void *)nap, NULL))
         {
             fprintf(stderr, "\nThread creation has failed\n");
             exit(NUMINIT + 1);
@@ -93,7 +94,7 @@ void officeHours(long int * numOfStudents, long int * roomCapacity)
     }
     for(iterator = NUMINIT; iterator < *numOfStudents; iterator++)
     {
-        if(NUMINIT != pthread_join(students[iterator], NULL))
+        if(NUMINIT != pthread_join(studentThreads[iterator], NULL))
         {
             fprintf(stderr, "\nThread join has failed\n");
             exit(NUMINIT + 1);
@@ -108,15 +109,23 @@ void officeHours(long int * numOfStudents, long int * roomCapacity)
 
 void professor()
 {
-    if(NUMINIT == pCond)
+    
+}
+
+void answerStart()
+{
+    if(NUMINIT == pCondition)
     {
         nap();
+    }
+    else
+    {
+        answerDone();
     }
 }
 
 void nap()
 {
-    char * message = "Shh!... No students left, the professor is napping";
+    char * message = "Shh!... No students left, the professor is napping!";
     fprintf(stdout, "%s\n", message);
-
 }
