@@ -20,6 +20,13 @@ and no part of it has been taken from any sources.
 #include <pthread.h>
 #define NUMINIT 0
 typedef enum {false, true} bool;
+struct student
+{
+	int id;
+	int numQuestions;
+	int questionNum;
+	struct student *next;
+};
 
 bool validateCommandInput(int, const char * [], long int *, long int *);
 void officeHours(long int *, long int *);
@@ -33,6 +40,8 @@ void questionDone();
 void leaveOffice();
 void nap();
 
+pthread_t professorThread;
+struct student* studentIterator, listHead;
 pthread_mutex_t sLock, pLock;
 long int sCondition, pCondition = NUMINIT;
 pthread_cond_t sConditional, profConditional;
@@ -72,9 +81,8 @@ bool validateCommandInput(int inputLength, const char * input[], long int * argO
 
 void officeHours(long int * numOfStudents, long int * roomCapacity)
 {
-    pthread_t studentThreads[*numOfStudents];
-    pthread_t professorThread;
-    int numOfQuestions[*numOfStudents];
+    /*
+
     pCondition = *numOfStudents;
     srand(time(NULL));
     int iterator;
@@ -105,11 +113,12 @@ void officeHours(long int * numOfStudents, long int * roomCapacity)
         fprintf(stderr, "\nThread join has failed\n");
         exit(NUMINIT + 1);
     }
+    */
 }
 
 void professor()
 {
-    
+
 }
 
 void answerStart()
@@ -120,8 +129,42 @@ void answerStart()
     }
     else
     {
-        answerDone();
+        char * message = "Professor starts to answer question for student";
+        fprintf("%s", message);
     }
+}
+
+void answerDone()
+{
+
+}
+
+void student(int id)
+{
+    struct student * newstud =  malloc(sizeof(struct student));
+    newstud->id = id + 1;
+	newstud->numQuestions = rand() % 4 + 1;
+	newstud->questionNum = 0;
+
+}
+void enterOffice()
+{
+
+}
+
+void questionStart()
+{
+
+}
+
+void questionDone()
+{
+
+}
+
+void leaveOffice()
+{
+
 }
 
 void nap()
